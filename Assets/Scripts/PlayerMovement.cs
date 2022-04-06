@@ -20,6 +20,7 @@ public class PlayerMovement : MonoBehaviour
 
     public int MaxAllowedJumps = 2;
    public int jumpCount;
+    public bool isOnLadder = false;
 
     void Start()
     {
@@ -38,27 +39,38 @@ public class PlayerMovement : MonoBehaviour
         }
 
         #region Input
-        nextMovement.x = Input.GetAxisRaw("Horizontal") * movementSpeed;
+    
 
-        //has the player pressed the jump key
-        if(Input.GetButtonDown("Vertical") && canJump)
+        if (!isOnLadder)
         {
-            if (jumpCount <= MaxAllowedJumps)
+            nextMovement.x = Input.GetAxisRaw("Horizontal") * movementSpeed;
+            //has the player pressed the jump key
+            if (Input.GetButtonDown("Vertical") && canJump)
             {
-                //jump, add some force to the rigid body
-                body.AddForce(jumpHeight, ForceMode2D.Impulse);
-                jumpCount++;
+                if (jumpCount <= MaxAllowedJumps)
+                {
+                    //jump, add some force to the rigid body
+                    body.AddForce(jumpHeight, ForceMode2D.Impulse);
+                    jumpCount++;
+                }
+                else
+                {
+                    canJump = false;//can't jump, once we go over the MaxAllowedJumps
+                }
             }
-            else
-            {
-                canJump = false;//can't jump, once we go over the MaxAllowedJumps
-            }
+
+
+            //maintain Y velocity, copying the Y velocity from physics system
+            nextMovement.y = body.velocity.y;
+
+            body.velocity = nextMovement;
         }
-
-        //maintain Y velocity, copying the Y velocity from physics system
-        nextMovement.y = body.velocity.y;
-
-        body.velocity = nextMovement;
+        else
+        {
+            nextMovement.x = Input.GetAxisRaw("Horizontal") * movementSpeed;
+            nextMovement.y = Input.GetAxisRaw("Vertical") * movementSpeed;
+            body.velocity = nextMovement;
+        }
 
         //change the sprite flip, based on the x movement
         if(nextMovement.x > 0)//positive x = facing right,
@@ -74,11 +86,24 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        //if the object is tagged as Checkpoint
-        if(collision.CompareTag("Checkpoint"))
+        if(collision.gameObject.CompareTag("Ladder"))
         {
-            //save the position of the checkpoint
-            lastCheckpointPosition = collision.gameObject.transform.position;
+            isOnLadder = true;
+            body.gravityScale = 0;
+        }
+        //if the object is tagged as Checkpoint
+        //if(collision.CompareTag("Checkpoint"))
+        //{
+        //    //save the position of the checkpoint
+        //    lastCheckpointPosition = collision.gameObject.transform.position;
+        //}
+    }
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Ladder"))
+        {
+            isOnLadder = false;
+            body.gravityScale = 1;
         }
     }
 
@@ -89,12 +114,22 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if(collision.contactCount >0)
+        CheckIfCanJump(collision);
+    }
+
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        CheckIfCanJump(collision);
+    }
+
+    private void CheckIfCanJump(Collision2D collision)
+    {
+        if (collision.contactCount > 0)
         {
             ContactPoint2D contact = collision.contacts[0];
 
             //if the the normal is the same dircetion as Vector2.Up -> 1.0 if the same, 0.0f if there not
-            if(Vector2.Dot(contact.normal, Vector2.up) > 0.5f)
+            if (Vector2.Dot(contact.normal, Vector2.up) > 0.5f)
             {
                 jumpCount = 0;
                 canJump = true;
@@ -106,13 +141,12 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-
     //Vector3 normal;
     //Vector3 collisionPoint;
     //public Color debugColor;
     //private void OnDrawGizmos()
     //{
-    //    Gizmos.color = debugColor;
+    //    Gizmos.color = Color.red;
     //    Gizmos.DrawLine(collisionPoint, collisionPoint + normal * 2);
     //}
 }
