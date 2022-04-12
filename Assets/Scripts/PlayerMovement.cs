@@ -18,7 +18,7 @@ public class PlayerMovement : MonoBehaviour
     //Checkpoint
     Vector2 lastCheckpointPosition;
 
-    public int MaxAllowedJumps = 2;
+    public int MaxAllowedJumps = 1;
    public int jumpCount;
     public bool isOnLadder = false;
 
