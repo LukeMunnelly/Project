@@ -4,10 +4,24 @@ using UnityEngine;
 
 public class Door : MonoBehaviour
 {
-    public int currentCoins;
+    private Playercharacter thePlayer;
+    public int requiredCoins = 5;
 
-    private void OnTriggerEnter2D(Collider2D collision)
+     void Start()
+    {
+        thePlayer = FindObjectOfType<Playercharacter>();
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
     {
         
+        if(other.tag == "Player")
+        {
+            if(thePlayer.currentCoins != requiredCoins)
+            {
+               Destroy(gameObject);
+            }
+        }
+
     }
 }

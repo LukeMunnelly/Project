@@ -16,4 +16,8 @@ public class Playercharacter : MonoBehaviour
             Destroy(collision.gameObject);
         }
     }
+
+    public bool requiredCoins;
+    //public Transform keyFollowPoint;
+
 }
