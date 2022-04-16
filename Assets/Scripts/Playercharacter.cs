@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Playercharacter : MonoBehaviour
 {
-    public int currentCoins = 1;
+    public int currentCoins = 0;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {

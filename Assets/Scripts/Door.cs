@@ -5,7 +5,7 @@ using UnityEngine;
 public class Door : MonoBehaviour
 {
     private Playercharacter thePlayer;
-    public int requiredCoins = 5;
+    public int requiredCoins;
 
      void Start()
     {
@@ -20,6 +20,10 @@ public class Door : MonoBehaviour
             if(thePlayer.currentCoins != requiredCoins)
             {
                Destroy(gameObject);
+            }
+            else if(thePlayer.currentCoins <= requiredCoins)
+            {
+                DontDestroyOnLoad(gameObject);
             }
         }
 
