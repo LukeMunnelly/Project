@@ -10,7 +10,7 @@ public class Playercharacter : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Coin"))
         {
-            currentCoins++;
+            
 
             currentCoins += collision.GetComponent<Coin>().coins;
             Destroy(collision.gameObject);

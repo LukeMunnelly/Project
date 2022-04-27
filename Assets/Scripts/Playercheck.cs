@@ -1,11 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Playercheck : MonoBehaviour
 {
-
-    public int Damage = 25;
+    public BoxCollider2D PlayerCollider;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -14,4 +14,9 @@ public class Playercheck : MonoBehaviour
             Destroy(transform.parent.gameObject);
         }
     }
+
+
+
 }
+    
+

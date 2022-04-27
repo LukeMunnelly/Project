@@ -17,15 +17,15 @@ public class Objecthealth : MonoBehaviour
         HandleCollision(collision.gameObject);
     }
 
-    public void AddHealth(int amount)
-    {
-        Health += amount;
+    ////public void AddHealth(int amount)
+    //{
+    //    Health += amount;
 
-        if (Health > MaxHealth)
-            Health = MaxHealth;
+    //    if (Health > MaxHealth)
+    //        Health = MaxHealth;
 
-        OnHealthUpdated();
-    }
+    //    OnHealthUpdated();
+    //}
 
     public void SubtractHealth(int amount)
     {

@@ -5,8 +5,12 @@ using UnityEngine.SceneManagement;
 
 public class Endtrigger : MonoBehaviour
 {
-    void OnTriggerEnter2D(Collider2D collider2D)
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        SceneManager.LoadScene(1);
+
+        if (collision.gameObject.tag == "Player")
+        {
+            SceneManager.LoadScene(1);
+        }
     }
 }

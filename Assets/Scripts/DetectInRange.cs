@@ -4,42 +4,40 @@ using UnityEngine;
 
 public class DetectInRange : MonoBehaviour
 {
-    public float detectionRange = 5;
-    public GameObject ObjectToTrack;
 
-    bool alreadyDetected = false;
+    public Transform player;
+    public float detectRange;
+    public bool inRange = false;
+    Rigidbody2D enemy;
+    public float moveSpeed = 2f;
+
+    private void Awake()
+    {
+        enemy = GetComponent<Rigidbody2D>();
+        detectRange *= detectRange;
+    }
+
+
+    
+
 
     private void Update()
     {
-        if (Vector3.Distance(transform.position, ObjectToTrack.transform.position) <= detectionRange)
+        float distsqr = (player.position - transform.position).sqrMagnitude;
+        if (distsqr <= detectRange)
         {
-            if (alreadyDetected == false)
-            {
-                OnDetected();
-                alreadyDetected = true;
-            }
-        }
-        else
-        {
-            alreadyDetected = false;
-            OnLost();
+            inRange = true;
+            Vector2 velocity = (player.transform.position - transform.position).normalized * moveSpeed;
+            enemy.velocity = velocity;
         }
     }
 
-    public virtual void OnDetected()
-    {
 
-    }
-
-    public virtual void OnLost()
-    {
-
-    }
 
 
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, detectionRange);
+        Gizmos.DrawWireSphere(transform.position, detectRange);
     }
 }
