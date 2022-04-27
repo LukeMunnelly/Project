@@ -9,6 +9,10 @@ TagManager:
   - Door
   - Ladder
   - Key
+  - Enemy
+  - Bounce
+  - Jump
+  - Teleport
   layers:
   - Default
   - TransparentFX
